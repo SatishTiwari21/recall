@@ -11,12 +11,6 @@ Recall is a RAG study assistant for students. Upload lecture PDFs, group them in
 - Low-confidence refusal when the uploaded notes do not support an answer.
 - Quiz and flashcard generation, with each item linked to its source chunk.
 
-## Screenshots
-
-### Landing page
-
-![Recall landing page](public/screenshots/landing-dark.png)
-
 ## Architecture
 
 Recall is built with Next.js App Router and TypeScript. Auth.js handles sessions with JWTs, bcrypt hashes passwords, and a custom guest provider creates isolated throwaway demo users.
