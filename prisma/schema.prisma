@@ -28,12 +28,12 @@ enum QuestionType {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  email         String         @unique
-  passwordHash  String?
-  name          String?
-  isGuest       Boolean        @default(false)
-  createdAt     DateTime       @default(now())
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String?
+  name         String?
+  isGuest      Boolean  @default(false)
+  createdAt    DateTime @default(now())
 
   studySets     StudySet[]
   conversations Conversation[]
@@ -42,10 +42,10 @@ model User {
 }
 
 model StudySet {
-  id            String         @id @default(cuid())
-  userId        String
-  title         String
-  createdAt     DateTime       @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  createdAt DateTime @default(now())
 
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   documents     Document[]
@@ -63,14 +63,14 @@ model Document {
   status     DocumentStatus @default(processing)
   createdAt  DateTime       @default(now())
 
-  studySet   StudySet       @relation(fields: [studySetId], references: [id], onDelete: Cascade)
-  chunks     Chunk[]
+  studySet StudySet @relation(fields: [studySetId], references: [id], onDelete: Cascade)
+  chunks   Chunk[]
 
   @@index([studySetId])
 }
 
 model Chunk {
-  id         String                       @id @default(cuid())
+  id         String                      @id @default(cuid())
   documentId String
   content    String
   embedding  Unsupported("vector(768)")?
@@ -78,48 +78,48 @@ model Chunk {
   chunkIndex Int
   tokenCount Int
 
-  document   Document                     @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  citations  Citation[]
-  questions  Question[]
+  document  Document   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  citations Citation[]
+  questions Question[]
 
   @@index([documentId])
 }
 
 model Conversation {
-  id         String    @id @default(cuid())
+  id         String   @id @default(cuid())
   userId     String
   studySetId String
   title      String
-  createdAt  DateTime  @default(now())
+  createdAt  DateTime @default(now())
 
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  studySet   StudySet  @relation(fields: [studySetId], references: [id], onDelete: Cascade)
-  messages   Message[]
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  studySet StudySet  @relation(fields: [studySetId], references: [id], onDelete: Cascade)
+  messages Message[]
 
   @@index([userId])
   @@index([studySetId])
 }
 
 model Message {
-  id             String       @id @default(cuid())
+  id             String      @id @default(cuid())
   conversationId String
   role           MessageRole
   content        String
-  createdAt      DateTime     @default(now())
+  createdAt      DateTime    @default(now())
 
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  citations      Citation[]
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  citations    Citation[]
 
   @@index([conversationId])
 }
 
 model Citation {
-  id        String  @id @default(cuid())
+  id        String @id @default(cuid())
   messageId String
   chunkId   String
 
-  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  chunk     Chunk   @relation(fields: [chunkId], references: [id], onDelete: Cascade)
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  chunk   Chunk   @relation(fields: [chunkId], references: [id], onDelete: Cascade)
 
   @@index([messageId])
   @@index([chunkId])
@@ -133,8 +133,8 @@ model Question {
   answer        String
   sourceChunkId String
 
-  studySet      StudySet     @relation(fields: [studySetId], references: [id], onDelete: Cascade)
-  sourceChunk   Chunk        @relation(fields: [sourceChunkId], references: [id], onDelete: Cascade)
+  studySet    StudySet @relation(fields: [studySetId], references: [id], onDelete: Cascade)
+  sourceChunk Chunk    @relation(fields: [sourceChunkId], references: [id], onDelete: Cascade)
 
   @@index([studySetId])
   @@index([sourceChunkId])
